@@ -1,0 +1,97 @@
+<!-- Inside templates/profile.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5" >
+        <div class="content-card" >
+            <h1 class="mb-4" style="font-weight: bold; font-size: 2em; color: #333;">Profile</h1>
+            <div class="card bg-light">
+                <div class="card-body" >
+                    <h2 style="font-weight: bold; font-size: 1.5em; color: #333;">Welcome, {{ user.username }}!</h2>
+                    <p class="mb-4" style="font-weight: bold; font-size: 1em; color: #333;">Name: {{ user.name }}</p>
+                    <p class="mb-4" style="font-weight: bold; font-size: 1em; color: #333;">Billing Address ID: {{ user.billing_address_id }}</p>
+
+                    <h3 style="font-weight: bold; font-size: 1.5em; color: #333;">Check Energy Pricing by ZIP Code</h3>
+                    <form method="GET" action="{{ url_for('energy_price_zipcode') }}">
+                        <div class="form-group">
+                            <label for="zipCodeDropdown" style="font-weight: bold; font-size: 1em; color: #333;">Select ZIP Code:</label>
+                            <select class="form-control" id="zipCodeDropdown" name="zip_code">
+                                {% for zip_code in all_zip_codes %}
+                                    <option value="{{ zip_code }}">{{ zip_code }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+
+                    <h3 style="font-weight: bold; font-size: 1.5em; color: #333;">Service Locations</h3>
+                    {% if user.service_locations %}
+                        <ul class="list-group mb-4">
+                            {% for service_location in user.service_locations %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ service_location.address }}
+                                    <span>
+                                        <a href="{{ url_for('edit_service_location', location_id=service_location.id) }}" class="btn btn-info btn-sm mr-2">Edit</a>
+                                        <a href="{{ url_for('remove_service_location', location_id=service_location.id) }}" class="btn btn-danger btn-sm">Remove</a>
+                                        <a href="{{ url_for('device_energy_consumption', service_location_id=service_location.id) }}" class="btn btn-info btn-sm mr-2">Device Energy Consumption</a>
+                                        <a href="{{ url_for('monthly_energy_cost', service_location_id=service_location.id) }}" class="btn btn-info btn-sm mr-2">Monthly Energy Cost</a>
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No service locations found.</p>
+                    {% endif %}
+
+                    <h3 style="font-weight: bold; font-size: 1.5em; color: #333;">Energy Consumption</h3>
+                    {% if user.service_locations %}
+                        {% for service_location in user.service_locations %}
+                            <div class="mb-3">
+                                <h5>{{ service_location.address }}</h5>
+                                <a href="{{ url_for('energy_consumption', service_location_id=service_location.id, time_resolution='day') }}" class="btn btn-info mr-2">Daily Usage</a>
+                                <a href="{{ url_for('energy_consumption', service_location_id=service_location.id, time_resolution='month') }}" class="btn btn-info mr-2">Monthly Usage</a>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No service locations found.</p>
+                    {% endif %}
+
+                    <h3 style="font-weight: bold; font-size: 1.5em; color: #333;">Enrolled Devices</h3>
+                    {% if user.service_locations %}
+                        <ul class="list-group mb-4">
+                            {% for service_location in user.service_locations %}
+                                <h5>{{ service_location.address }}</h5>
+                                {% if service_location.enrolled_devices %}
+                                    <ul class="list-group">
+                                        {% for enrolled_device in service_location.enrolled_devices %}
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                Device: {{ enrolled_device.device_model.type }} - {{ enrolled_device.device_model.model_number }}
+                                                <span>
+                                                    <a href="{{ url_for('remove_enrolled_device', device_id=enrolled_device.id) }}" class="btn btn-danger btn-sm">Remove</a>
+                                                </span>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p>No enrolled devices for this service location.</p>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No service locations found.</p>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <a href="{{ url_for('add_service_location') }}" class="btn btn-outline-primary">Add Service Location</a>
+                        <a href="{{ url_for('enroll_device') }}" class="btn btn-outline-primary">Enroll Device</a>
+                        <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary">Edit Profile</a>
+                        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+                    </div>
+
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-primary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

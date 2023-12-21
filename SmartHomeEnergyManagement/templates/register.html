@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: repeating-linear-gradient(45deg, #eaeaea, #eaeaea 10px, transparent 10px, transparent 20px);;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .registration-container {
+            max-width: 400px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        h1 {
+            color: #004080; /* Deep blue color */
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333333; /* Dark gray color */
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #cccccc; /* Light gray border */
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #004080; /* Deep blue color */
+            color: #ffffff; /* White color */
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00284d; /* Darker shade on hover */
+        }
+
+        p {
+            color: red;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="registration-container">
+        <h1>Register</h1>
+        {% if error_message %}
+            <p>{{ error_message }}</p>
+        {% endif %}
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+
+            <label for="username">{{ form.username.label }}</label>
+            {{ form.username(class="form-control", placeholder="Enter your username", required=True) }}
+
+            <label for="password">{{ form.password.label }}</label>
+            {{ form.password(class="form-control", placeholder="Enter your password", required=True) }}
+
+            <!-- Add fields for name and billing address -->
+            <label for="name">{{ form.name.label }}</label>
+            {{ form.name(class="form-control", placeholder="Enter your name") }}
+
+            <label for="billing_address_id">{{ form.billing_address_id.label }}</label>
+            {{ form.billing_address_id(class="form-control", placeholder="Enter your billing address") }}
+
+            <label for="zip_code">{{ form.zip_code.label }}</label>
+            {{ form.zip_code(class="form-control", placeholder="Enter your ZIP code", required=True) }}
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>

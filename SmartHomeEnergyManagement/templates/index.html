@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: repeating-linear-gradient(45deg, #eaeaea, #eaeaea 10px, transparent 10px, transparent 20px);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1, p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #004080;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            display: inline-block;
+            padding: 12px 24px;
+            border: 2px solid #004080;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            margin: 5px; /* Adjusted spacing between buttons */
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logout-button {
+            margin-top: 20px; /* Space between other buttons and logout button */
+        }
+
+        a:hover {
+            background-color: #004080;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        {% if current_user %}
+            <h1>Welcome, {{ current_user.username }}!</h1>
+            <p style="font-weight: bold; font-size: 1em; color: #333;">View your profile: <a href="{{ url_for('profile') }}">Profile</a></p>
+            <p style="font-weight: bold; font-size: 1em; color: #333;">Edit your profile: <a href="{{ url_for('edit_profile') }}">Edit Profile</a></p>
+            <p class="logout-button"><a href="{{ url_for('logout') }}">Logout</a></p>
+        {% else %}
+            <h1>Unlock Sustainable Futures: Welcome to Our Smart Energy Monitoring Solution!</h1>
+            <!-- Your existing content goes here -->
+            <p><a href="{{ url_for('register') }}">Register</a></p>
+            <p><a href="{{ url_for('login') }}">Login</a></p>
+        {% endif %}
+    </div>
+</body>
+</html>
